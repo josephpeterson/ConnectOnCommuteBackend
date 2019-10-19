@@ -88,7 +88,7 @@ namespace ConnectOnCommuteBackend.Services
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role),
-                //new Claim(ClaimTypes.Name, user.Username)
+                new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName)
             };
 
             var tokeOptions = new JwtSecurityToken(
