@@ -85,7 +85,7 @@ namespace ConnectOnCommuteBackend.DataAccess
             if (latestPosition == null)
                 return new List<Account>();
 
-            var time = 5 * 1000 * 60;
+            var time = 60000;
             return _dbConnectOnCommute.TblPosition
                 .Where(p =>
                 (p.Timestamp - latestPosition.Timestamp).TotalMilliseconds <= time
