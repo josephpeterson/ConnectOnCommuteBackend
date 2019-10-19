@@ -69,5 +69,29 @@ namespace ConnectOnCommuteBackend.Controllers
             _accountService.UpdateUser(account);
             return new OkObjectResult(account);
         }
+        [HttpGet]
+        [Route("People/{targetId}/Connected")]
+        public IActionResult HasConnection(int targetId)
+        {
+            int accountId = Convert.ToInt16(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            return new OkObjectResult(_connectOnCommuteService.HasConnection(accountId, targetId));
+        
+        }
+        [HttpGet]
+        [Route("People/{targetId}/Connect")]
+        public IActionResult StartConnection(int targetId)
+        {
+            int accountId = Convert.ToInt16(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            return new OkObjectResult(_connectOnCommuteService.ConnectWithUser(accountId, targetId));
+
+        }
+        [HttpGet]
+        [Route("People/Notifications")]
+        public IActionResult GetNotifications()
+        {
+            int accountId = Convert.ToInt16(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            return new OkObjectResult(_connectOnCommuteService.GetAvailableNotifications(accountId));
+
+        }
     }
 }

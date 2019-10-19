@@ -13,12 +13,16 @@ namespace ConnectOnCommuteBackend.DataAccess
     {
         Account AddAccount(Account user);
         UserPosition AddUserPosition(UserPosition position);
+        bool ConnectWithUser(int accountId, int targetId);
+        AccountNotification EmitNotification(AccountNotification notification);
         Account GetAccountById(int userId);
         Account GetAccountByLogin(string email, string password);
         List<Account> GetAllAccounts();
+        List<AccountNotification> GetAvailableNotifications(int accountId);
         Account GetNearestPerson(int userId);
         List<Account> GetPeopleNearUser(int userId);
         Account GetUserByEmail(string email);
+        bool HasConnected(int accountId, int targetId);
         Account UpdateAccount(Account user);
     }
     public class ConnectOnCommuteDao : IConnectOnCommuteDao
@@ -124,7 +128,7 @@ namespace ConnectOnCommuteBackend.DataAccess
             var time = 30;
             double meters = 100;
             var acc = _dbConnectOnCommute.TblPosition
-                .Where(p =>
+                 .Where(p =>
                 p.Account.FindableStatus == true
                 && Math.Abs((DateTime.Now.ToUniversalTime() - p.Timestamp).TotalSeconds) <= time
                 && (new GeoCoordinate(latestPosition.Latitude, latestPosition.Longitude)).GetDistanceTo(new GeoCoordinate(p.Latitude, p.Longitude)) <= meters
@@ -136,6 +140,77 @@ namespace ConnectOnCommuteBackend.DataAccess
                 .Distinct()
                 .FirstOrDefault();
             return acc;
+        }
+        public bool ConnectWithUser(int accountId,int targetId)
+        {
+            if (HasConnected(accountId, targetId))
+                return false;
+
+            var rec = _dbConnectOnCommute.TblConnection.Where(r =>
+            (r.AccountId == accountId && r.TargetId == targetId))
+                .FirstOrDefault();
+
+            if (rec == null)
+            {
+                var con = new AccountConnection()
+                {
+                    AccountId = accountId,
+                    TargetId = targetId,
+                    Timestamp = DateTime.Now
+                };
+                _dbConnectOnCommute.TblConnection.Add(con);
+                _dbConnectOnCommute.SaveChanges();
+            }
+            var val = HasConnected(accountId, targetId);
+            if(val)
+            {
+                var user = GetAccountById(accountId);
+                var target = GetAccountById(targetId);
+                //Tell the other user
+                EmitNotification(new AccountNotification()
+                {
+                    AccountId = targetId,
+                    Type = 1,
+                    Dismissed = false,
+                    Timestamp = DateTime.Now.ToUniversalTime(),
+                    Text = "Congraduations, you have a new connection! You and " + user.FirstName + " " + user.LastName + " are now connected!"
+                });
+                EmitNotification(new AccountNotification()
+                {
+                    AccountId = accountId,
+                    Type = 1,
+                    Dismissed = false,
+                    Timestamp = DateTime.Now.ToUniversalTime(),
+                    Text = "Congraduations, you have a new connection! You and " + target.FirstName + " " + target.LastName + " are now connected!"
+                });
+            }
+            return val;
+
+        }
+        public bool HasConnected(int accountId,int targetId)
+        {
+            var a = _dbConnectOnCommute.TblConnection.Where(r =>
+            (r.AccountId == accountId && r.TargetId == targetId))
+                .FirstOrDefault();
+            var b = _dbConnectOnCommute.TblConnection.Where(r =>
+            (r.AccountId == targetId && r.TargetId == accountId))
+                .FirstOrDefault();
+            return b != null && a != null;
+        }
+        public AccountNotification EmitNotification(AccountNotification notification)
+        {
+            _dbConnectOnCommute.TblNotification.Add(notification);
+            _dbConnectOnCommute.SaveChanges();
+            return notification;
+        }
+        public List<AccountNotification> GetAvailableNotifications(int accountId)
+        {
+            var notifs = _dbConnectOnCommute.TblNotification.Where(n => n.AccountId == accountId && !n.Dismissed).ToList();
+            notifs.ForEach(n => n.Dismissed = true);
+            _dbConnectOnCommute.TblNotification.UpdateRange(notifs);
+            _dbConnectOnCommute.SaveChanges();
+            return notifs;
+            
         }
     }
 }

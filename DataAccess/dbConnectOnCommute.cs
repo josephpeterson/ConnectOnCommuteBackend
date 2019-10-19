@@ -14,6 +14,8 @@ namespace ConnectOnCommuteBackend.DataAccess
 
         public virtual DbSet<Account> TblAccount { get; set; }
         public virtual DbSet<UserPosition> TblPosition { get; set; }
+        public virtual DbSet<AccountConnection> TblConnection { get; set; }
+        public virtual DbSet<AccountNotification> TblNotification { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -25,7 +27,17 @@ namespace ConnectOnCommuteBackend.DataAccess
             modelBuilder.Entity<UserPosition>(entity =>
             {
                 entity.ToTable("coctblPosition");
-            
+
+            });
+            modelBuilder.Entity<AccountConnection>(entity =>
+            {
+                entity.ToTable("coctblConnection");
+
+            });
+            modelBuilder.Entity<AccountNotification>(entity =>
+            {
+                entity.ToTable("coctblNotifications");
+
             });
         }
     }

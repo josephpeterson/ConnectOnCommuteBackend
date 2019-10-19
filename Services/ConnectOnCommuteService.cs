@@ -14,8 +14,12 @@ namespace ConnectOnCommuteBackend.Services
     public interface IConnectOnCommuteService
     {
         UserPosition AddUserPosition(int userId, UserCoords userLocation);
+        bool ConnectWithUser(int accountId, int targetId);
+        AccountNotification EmitNotification(AccountNotification notification);
+        List<AccountNotification> GetAvailableNotifications(int accountId);
         Account GetNearestPerson(int userId);
         List<Account> GetPeopleNearUser(int userId);
+        bool HasConnection(int accountId, int targetId);
     }
     public class ConnectOnCommuteService: IConnectOnCommuteService
     {
@@ -59,6 +63,22 @@ namespace ConnectOnCommuteBackend.Services
             if (!acc.FindableStatus)
                 return null;
             return _connectOnCommuteDao.GetNearestPerson(userId);
+        }
+        public bool ConnectWithUser(int accountId,int targetId)
+        {
+            return _connectOnCommuteDao.ConnectWithUser(accountId, targetId);
+        }
+        public bool HasConnection(int accountId,int targetId)
+        {
+            return _connectOnCommuteDao.HasConnected(accountId, targetId);
+        }
+        public AccountNotification EmitNotification(AccountNotification notification)
+        {
+            return _connectOnCommuteDao.EmitNotification(notification);
+        }
+        public List<AccountNotification> GetAvailableNotifications(int accountId)
+        {
+            return _connectOnCommuteDao.GetAvailableNotifications(accountId);
         }
     }
 }
