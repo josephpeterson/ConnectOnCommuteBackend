@@ -20,12 +20,12 @@ namespace ConnectOnCommuteBackend.Services
     {
         private IConfiguration _configuration;
         private IConnectOnCommuteDao _connectOnCommuteDao;
-        private readonly IMapper _mapper;
+        //private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _context;
 
-        public ConnectOnCommuteService(IHttpContextAccessor context, IConfiguration configuration, IConnectOnCommuteDao connectOnCommuteDao)
+        public ConnectOnCommuteService(IConfiguration configuration, IConnectOnCommuteDao connectOnCommuteDao)
         {
-            _context = context;
+            //_context = context;
             _configuration = configuration;
             _connectOnCommuteDao = connectOnCommuteDao;
         }

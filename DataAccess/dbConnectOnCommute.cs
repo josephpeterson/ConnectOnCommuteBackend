@@ -19,7 +19,7 @@ namespace ConnectOnCommuteBackend.DataAccess
         {
             modelBuilder.Entity<Account>(entity =>
             {
-                entity.ToTable("tblAccount");
+                entity.ToTable("coctblAccount");
             });
         }
     }

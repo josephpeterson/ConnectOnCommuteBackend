@@ -72,7 +72,7 @@ namespace ConnectOnCommuteBackend.Controllers
             {
                 var account = _accountService.AddUser(signupRequest);
                 var login = _accountService.LoginUser(account.Email, account.Password);
-                return new OkObjectResult(login);
+                return new OkObjectResult(new { Token = login });
             }
             catch (Exception ex)
             {
@@ -83,13 +83,12 @@ namespace ConnectOnCommuteBackend.Controllers
         [HttpPost]
         [Route("/v1/Account/Login")]
         [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
-        public IActionResult LoginAccount([FromBody] SignupRequest signupRequest)
+        public IActionResult LoginAccount([FromBody] LoginRequest loginRequest)
         {
             try
             {
-                var account = _accountService.AddUser(signupRequest);
-                var login = _accountService.LoginUser(account.Email, account.Password);
-                return new OkObjectResult(login);
+                var login = _accountService.LoginUser(loginRequest.Email, loginRequest.Password);
+                return new OkObjectResult(new { Token = login });
             }
             catch (Exception ex)
             {

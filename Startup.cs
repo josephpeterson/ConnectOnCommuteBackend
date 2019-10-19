@@ -142,6 +142,7 @@ public class Startup
                 .UseSqlServer(Configuration["Database:dbConnectOnCommute"])
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll));
 
+        services.AddTransient<IConnectOnCommuteService, ConnectOnCommuteService>();
         services.AddTransient<IConnectOnCommuteDao, ConnectOnCommuteDao>();
         services.AddTransient<IAccountService, AccountService>();
         services.AddSingleton<IConfiguration>(Configuration);

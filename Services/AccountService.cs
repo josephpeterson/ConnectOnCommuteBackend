@@ -26,23 +26,31 @@ namespace ConnectOnCommuteBackend.Services
     {
         private IConfiguration _configuration;
         private IConnectOnCommuteDao _connectOnCommuteDao;
-        private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _context;
 
-        public AccountService(IMapper mapper,IHttpContextAccessor context, IConfiguration configuration, IConnectOnCommuteDao connectOnCommuteDao)
+        public AccountService(/*IHttpContextAccessor context,*/ IConfiguration configuration, IConnectOnCommuteDao connectOnCommuteDao)
         {
-            _mapper = mapper;
-            _context = context;
+            //_mapper = mapper;
+            //_context = context;
             _configuration = configuration;
             _connectOnCommuteDao = connectOnCommuteDao;
         }
+        /*
         public int GetCurrentUserId()
         {
             return Convert.ToInt16(_context.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
         }
+        */
         public Account AddUser(SignupRequest user)
         {
-            var account = _mapper.Map<Account>(user);
+            var account = new Account()
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Password = user.Password,
+                Question = user.Question
+            };
             account.Role = "User";
             account.SeniorityDate = DateTime.Now;
             return _connectOnCommuteDao.AddAccount(account);
