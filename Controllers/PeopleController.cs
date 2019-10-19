@@ -43,5 +43,13 @@ namespace ConnectOnCommuteBackend.Controllers
             var accounts = _connectOnCommuteService.GetPeopleNearUser(userId);
             return new OkObjectResult(accounts);
         }
+        [HttpGet]
+        [Route("People/Nearest")]
+        public IActionResult GetNearestPerson()
+        {
+            int userId = Convert.ToInt16(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var account = _connectOnCommuteService.GetNearestPerson(userId);
+            return new OkObjectResult(account);
+        }
     }
 }

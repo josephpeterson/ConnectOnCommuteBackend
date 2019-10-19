@@ -14,6 +14,7 @@ namespace ConnectOnCommuteBackend.Services
     public interface IConnectOnCommuteService
     {
         UserPosition AddUserPosition(int userId, UserCoords userLocation);
+        Account GetNearestPerson(int userId);
         List<Account> GetPeopleNearUser(int userId);
     }
     public class ConnectOnCommuteService: IConnectOnCommuteService
@@ -45,6 +46,10 @@ namespace ConnectOnCommuteBackend.Services
         {
             List<Account> accounts = _connectOnCommuteDao.GetPeopleNearUser(userId);
             return accounts;
+        }
+        public Account GetNearestPerson(int userId)
+        {
+            return _connectOnCommuteDao.GetNearestPerson(userId);
         }
     }
 }

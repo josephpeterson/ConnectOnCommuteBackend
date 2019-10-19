@@ -7,8 +7,8 @@ namespace ConnectOnCommuteBackend.Models
     {
         public int Id { get; set; }
         public int AccountId { get; set; }
-        public int Longitude { get; set; }
-        public int Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
         public DateTime Timestamp { get; set; }
 
         [ForeignKey("AccountId")]
