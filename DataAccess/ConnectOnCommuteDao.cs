@@ -88,8 +88,8 @@ namespace ConnectOnCommuteBackend.DataAccess
             var time = 5 * 1000 * 60;
             return _dbConnectOnCommute.TblPosition
                 .Where(p =>
-                //(p.Timestamp.Millisecond - latestPosition.Timestamp.Millisecond) <= time
-                Math.Sqrt(((latestPosition.Latitude-p.Latitude)^2) + ((latestPosition.Longitude - p.Longitude)^2)) < 50
+                (p.Timestamp - latestPosition.Timestamp).TotalMilliseconds <= time
+                && Math.Sqrt(((latestPosition.Latitude-p.Latitude)^2) + ((latestPosition.Longitude - p.Longitude)^2)) < 50
                 && p.AccountId != userId)
                 .Include(p => p.Account)
                 .Select( p=> p.Account)
