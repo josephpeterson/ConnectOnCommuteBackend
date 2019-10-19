@@ -1,7 +1,7 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectOnCommuteBackend", "ConnectOnCommuteBackend.csproj", "{14299B0F-010B-468A-AFEB-E9A56DC894B5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectOnCommuteBackend", "ConnectOnCommuteBackend.csproj", "{28FA8F94-CBD7-401E-8437-7C437CC9F6F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,9 +9,9 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{14299B0F-010B-468A-AFEB-E9A56DC894B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{14299B0F-010B-468A-AFEB-E9A56DC894B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{14299B0F-010B-468A-AFEB-E9A56DC894B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{14299B0F-010B-468A-AFEB-E9A56DC894B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28FA8F94-CBD7-401E-8437-7C437CC9F6F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28FA8F94-CBD7-401E-8437-7C437CC9F6F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28FA8F94-CBD7-401E-8437-7C437CC9F6F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28FA8F94-CBD7-401E-8437-7C437CC9F6F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
