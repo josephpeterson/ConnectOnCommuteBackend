@@ -25,6 +25,7 @@ namespace ConnectOnCommuteBackend.DataAccess
             modelBuilder.Entity<UserPosition>(entity =>
             {
                 entity.ToTable("coctblPosition");
+            
             });
         }
     }

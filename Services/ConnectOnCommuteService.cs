@@ -37,8 +37,8 @@ namespace ConnectOnCommuteBackend.Services
             {
                 AccountId = userId,
                 Timestamp = DateTime.Now.ToUniversalTime(),
-                Longitude = userLocation.Longitude,
-                Latitude = userLocation.Latitude
+                LongitudeStr = userLocation.Longitude.ToString(),
+                LatitudeStr = userLocation.Latitude.ToString()
             };
             return _connectOnCommuteDao.AddUserPosition(pos);
         }
