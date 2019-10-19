@@ -78,17 +78,17 @@ namespace ConnectOnCommuteBackend.DataAccess
         {
             var latestPosition = _dbConnectOnCommute.TblPosition
                 .Where(p => p.AccountId == userId)
-                .OrderByDescending(p => p.Timestamp)
-                .Take(1)
+                .OrderBy(p => p.Timestamp)
+     
                 .FirstOrDefault();
 
             if (latestPosition == null)
                 return new List<Account>();
 
-            var time = 60000;
+            var time = 60;
             return _dbConnectOnCommute.TblPosition
                 .Where(p =>
-                (p.Timestamp - latestPosition.Timestamp).TotalMilliseconds <= time
+                (p.Timestamp - latestPosition.Timestamp).TotalSeconds <= time
                 && Math.Sqrt(((latestPosition.Latitude-p.Latitude)^2) + ((latestPosition.Longitude - p.Longitude)^2)) < 50
                 && p.AccountId != userId)
                 .Include(p => p.Account)
