@@ -33,6 +33,9 @@ namespace ConnectOnCommuteBackend.Services
 
         public  UserPosition AddUserPosition(int userId,UserCoords userLocation)
         {
+            var acc = _connectOnCommuteDao.GetAccountById(userId);
+            if (!acc.FindableStatus)
+                return null;
             var pos = new UserPosition()
             {
                 AccountId = userId,
@@ -44,11 +47,17 @@ namespace ConnectOnCommuteBackend.Services
         }
         public List<Account> GetPeopleNearUser(int userId)
         {
+            var acc = _connectOnCommuteDao.GetAccountById(userId);
+            if (!acc.FindableStatus)
+                return null;
             List<Account> accounts = _connectOnCommuteDao.GetPeopleNearUser(userId);
             return accounts;
         }
         public Account GetNearestPerson(int userId)
         {
+            var acc = _connectOnCommuteDao.GetAccountById(userId);
+            if (!acc.FindableStatus)
+                return null;
             return _connectOnCommuteDao.GetNearestPerson(userId);
         }
     }

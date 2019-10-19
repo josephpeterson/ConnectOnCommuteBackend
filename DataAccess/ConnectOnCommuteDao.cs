@@ -125,7 +125,8 @@ namespace ConnectOnCommuteBackend.DataAccess
             double meters = 100;
             var acc = _dbConnectOnCommute.TblPosition
                 .Where(p =>
-                Math.Abs((DateTime.Now.ToUniversalTime() - p.Timestamp).TotalSeconds) <= time
+                p.Account.FindableStatus == true
+                && Math.Abs((DateTime.Now.ToUniversalTime() - p.Timestamp).TotalSeconds) <= time
                 && (new GeoCoordinate(latestPosition.Latitude, latestPosition.Longitude)).GetDistanceTo(new GeoCoordinate(p.Latitude, p.Longitude)) <= meters
                 && p.AccountId != userId)
                 .Include(p => p.Account)
