@@ -87,7 +87,7 @@ namespace ConnectOnCommuteBackend.DataAccess
                 return new List<Account>();
 
             var time = 30;
-            double meters = 100;
+            double meters = 10;
             double temp = 0;
             return _dbConnectOnCommute.TblPosition
                 .Where(p =>
