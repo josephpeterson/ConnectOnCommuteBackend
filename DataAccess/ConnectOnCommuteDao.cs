@@ -76,9 +76,11 @@ namespace ConnectOnCommuteBackend.DataAccess
         }
         public List<Account> GetPeopleNearUser(int userId)
         {
-            var latestPosition = _dbConnectOnCommute.TblPosition.Take(1)
+            var latestPosition = _dbConnectOnCommute.TblPosition
                 .Where(p => p.AccountId == userId)
-                .OrderByDescending(p => p.Timestamp).FirstOrDefault();
+                .OrderByDescending(p => p.Timestamp)
+                .Take(1)
+                .FirstOrDefault();
 
             if (latestPosition == null)
                 return new List<Account>();
