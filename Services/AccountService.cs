@@ -69,7 +69,7 @@ namespace ConnectOnCommuteBackend.Services
         }
         public Account UpdateUser(Account user)
         {
-            throw new NotImplementedException();
+            return _connectOnCommuteDao.UpdateAccount(user);
         }
         public void DeleteUser(int userId)
         {

@@ -11,5 +11,6 @@ namespace ConnectOnCommuteBackend.Models
         public string Question { get; set; }
         public string Role { get; set; }
         public DateTime SeniorityDate { get; set; }
+        public bool FindableStatus { get; set; }
     }
 }

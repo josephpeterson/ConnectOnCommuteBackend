@@ -19,6 +19,7 @@ namespace ConnectOnCommuteBackend.DataAccess
         Account GetNearestPerson(int userId);
         List<Account> GetPeopleNearUser(int userId);
         Account GetUserByEmail(string email);
+        Account UpdateAccount(Account user);
     }
     public class ConnectOnCommuteDao : IConnectOnCommuteDao
     {
@@ -56,6 +57,12 @@ namespace ConnectOnCommuteBackend.DataAccess
             _dbConnectOnCommute.SaveChanges();
             return user;
         }
+        public Account UpdateAccount(Account user)
+        {
+            _dbConnectOnCommute.Update(user);
+            _dbConnectOnCommute.SaveChanges();
+            return GetAccountById(user.Id);
+        }
         public Account GetAccountById(int userId)
         {
             return _dbConnectOnCommute.TblAccount.AsNoTracking()
@@ -87,14 +94,16 @@ namespace ConnectOnCommuteBackend.DataAccess
                 return new List<Account>();
 
             var time = 30;
-            double meters = 10;
+            double meters = 100;
             double temp = 0;
             return _dbConnectOnCommute.TblPosition
+                .Include(p => p.Account)
                 .Where(p =>
-                Math.Abs((DateTime.Now.ToUniversalTime() - p.Timestamp).TotalSeconds) <= time
+                p.Account.FindableStatus == true
+                && Math.Abs((DateTime.Now.ToUniversalTime() - p.Timestamp).TotalSeconds) <= time
                 && (new GeoCoordinate(latestPosition.Latitude, latestPosition.Longitude)).GetDistanceTo(new GeoCoordinate(p.Latitude, p.Longitude)) <= meters
                 && p.AccountId != userId)
-                .Include(p => p.Account)
+
                 .OrderByDescending(p =>
                 (new GeoCoordinate(latestPosition.Latitude, latestPosition.Longitude)).GetDistanceTo(new GeoCoordinate(p.Latitude, p.Longitude)))
                 .Select(p => p.Account)

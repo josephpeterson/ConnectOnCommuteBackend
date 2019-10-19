@@ -51,5 +51,23 @@ namespace ConnectOnCommuteBackend.Controllers
             var account = _connectOnCommuteService.GetNearestPerson(userId);
             return new OkObjectResult(account);
         }
+        [HttpGet]
+        [Route("People/Findable")]
+        public IActionResult GetFindableStatus()
+        {
+            int userId = Convert.ToInt16(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var account = _accountService.GetUserById(userId);
+            return new OkObjectResult(account.FindableStatus);
+        }
+        [HttpGet]
+        [Route("People/ToggleFindable")]
+        public IActionResult ToggleFindableStatus()
+        {
+            int userId = Convert.ToInt16(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var account = _accountService.GetUserById(userId);
+            account.FindableStatus = !account.FindableStatus;
+            _accountService.UpdateUser(account);
+            return new OkObjectResult(account);
+        }
     }
 }
