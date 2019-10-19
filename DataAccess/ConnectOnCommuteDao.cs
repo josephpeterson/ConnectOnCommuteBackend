@@ -11,9 +11,11 @@ namespace ConnectOnCommuteBackend.DataAccess
     public interface IConnectOnCommuteDao
     {
         Account AddAccount(Account user);
+        UserPosition AddUserPosition(UserPosition position);
         Account GetAccountById(int userId);
         Account GetAccountByLogin(string email, string password);
         List<Account> GetAllAccounts();
+        List<Account> GetPeopleNearUser(int userId);
         Account GetUserByEmail(string email);
     }
     public class ConnectOnCommuteDao : IConnectOnCommuteDao
@@ -63,6 +65,34 @@ namespace ConnectOnCommuteBackend.DataAccess
             return _dbConnectOnCommute.TblAccount.AsNoTracking()
                 .Where(p => p.Email == email)
                 .SingleOrDefault();
+        }
+
+        public UserPosition AddUserPosition(UserPosition position)
+        {
+            
+            _dbConnectOnCommute.TblPosition.Add(position);
+            _dbConnectOnCommute.SaveChanges();
+            return position;
+        }
+        public List<Account> GetPeopleNearUser(int userId)
+        {
+            var latestPosition = _dbConnectOnCommute.TblPosition.Take(1)
+                .Where(p => p.AccountId == userId)
+                .OrderByDescending(p => p.Timestamp).FirstOrDefault();
+
+            if (latestPosition == null)
+                return new List<Account>();
+
+            var time = 5 * 1000 * 60;
+            return _dbConnectOnCommute.TblPosition
+                .Where(p => (p.Timestamp.Millisecond - latestPosition.Timestamp.Millisecond) <= time
+                && Math.Abs(latestPosition.Latitude-p.Latitude) < 50
+                && Math.Abs(latestPosition.Longitude - p.Longitude) < 50
+                && p.AccountId != userId)
+                .Include(p => p.Account)
+                .Select( p=> p.Account)
+                .Distinct()
+                .ToList();
         }
     }
 }

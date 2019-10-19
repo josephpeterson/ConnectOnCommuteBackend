@@ -4,7 +4,7 @@ namespace ConnectOnCommuteBackend.DataAccess
     using ConnectOnCommuteBackend.Models;
     using Microsoft.EntityFrameworkCore;
 
-    public partial class DbConnectOnCommute : DbContext
+    public class DbConnectOnCommute : DbContext
     {
 
         public DbConnectOnCommute(DbContextOptions<DbConnectOnCommute> options) : base(options)
@@ -13,6 +13,7 @@ namespace ConnectOnCommuteBackend.DataAccess
         }
 
         public virtual DbSet<Account> TblAccount { get; set; }
+        public virtual DbSet<UserPosition> TblPosition { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -20,6 +21,10 @@ namespace ConnectOnCommuteBackend.DataAccess
             modelBuilder.Entity<Account>(entity =>
             {
                 entity.ToTable("coctblAccount");
+            });
+            modelBuilder.Entity<UserPosition>(entity =>
+            {
+                entity.ToTable("coctblPosition");
             });
         }
     }

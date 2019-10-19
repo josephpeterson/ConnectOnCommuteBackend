@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using AutoMapper;
 using ConnectOnCommuteBackend.DataAccess;
 using ConnectOnCommuteBackend.Models;
 using Microsoft.AspNetCore.Http;
@@ -14,7 +13,8 @@ namespace ConnectOnCommuteBackend.Services
 {
     public interface IConnectOnCommuteService
     {
-         
+        UserPosition AddUserPosition(int userId, UserCoords userLocation);
+        List<Account> GetPeopleNearUser(int userId);
     }
     public class ConnectOnCommuteService: IConnectOnCommuteService
     {
@@ -28,6 +28,23 @@ namespace ConnectOnCommuteBackend.Services
             //_context = context;
             _configuration = configuration;
             _connectOnCommuteDao = connectOnCommuteDao;
+        }
+
+        public  UserPosition AddUserPosition(int userId,UserCoords userLocation)
+        {
+            var pos = new UserPosition()
+            {
+                AccountId = userId,
+                Timestamp = DateTime.Now,
+                Longitude = userLocation.Longitude,
+                Latitude = userLocation.Latitude
+            };
+            return _connectOnCommuteDao.AddUserPosition(pos);
+        }
+        public List<Account> GetPeopleNearUser(int userId)
+        {
+            List<Account> accounts = _connectOnCommuteDao.GetPeopleNearUser(userId);
+            return accounts;
         }
     }
 }
