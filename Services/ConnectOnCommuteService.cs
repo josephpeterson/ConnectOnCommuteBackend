@@ -35,7 +35,7 @@ namespace ConnectOnCommuteBackend.Services
             var pos = new UserPosition()
             {
                 AccountId = userId,
-                Timestamp = DateTime.Now,
+                Timestamp = DateTime.Now.ToUniversalTime(),
                 Longitude = userLocation.Longitude,
                 Latitude = userLocation.Latitude
             };

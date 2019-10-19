@@ -52,7 +52,7 @@ namespace ConnectOnCommuteBackend.Services
                 Question = user.Question
             };
             account.Role = "User";
-            account.SeniorityDate = DateTime.Now;
+            account.SeniorityDate = DateTime.Now.ToUniversalTime();
             return _connectOnCommuteDao.AddAccount(account);
         }
         public List<Account> GetAllUsers()
@@ -95,7 +95,7 @@ namespace ConnectOnCommuteBackend.Services
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Jwt:LengthMins"])),
+                expires: DateTime.Now.ToUniversalTime().AddMinutes(Convert.ToDouble(_configuration["Jwt:LengthMins"])),
                 signingCredentials: signinCredentials
             );
             return new JwtSecurityTokenHandler().WriteToken(tokeOptions);
