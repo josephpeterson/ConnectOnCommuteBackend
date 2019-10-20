@@ -17,6 +17,7 @@ namespace ConnectOnCommuteBackend.DataAccess
         AccountNotification EmitNotification(AccountNotification notification);
         Account GetAccountById(int userId);
         Account GetAccountByLogin(string email, string password);
+        List<AccountConnection> GetAccountConnections(int userId);
         List<Account> GetAllAccounts();
         List<AccountNotification> GetAvailableNotifications(int accountId);
         Account GetNearestPerson(int userId);
@@ -127,7 +128,7 @@ namespace ConnectOnCommuteBackend.DataAccess
 
             var time = 30;
             double meters = 100;
-            var acc = _dbConnectOnCommute.TblPosition
+            return  _dbConnectOnCommute.TblPosition
                  .Where(p =>
                 p.Account.FindableStatus == true
                 && Math.Abs((DateTime.Now.ToUniversalTime() - p.Timestamp).TotalSeconds) <= time
@@ -139,7 +140,6 @@ namespace ConnectOnCommuteBackend.DataAccess
                 .Select(p => p.Account)
                 .Distinct()
                 .FirstOrDefault();
-            return acc;
         }
         public bool ConnectWithUser(int accountId,int targetId)
         {
@@ -173,7 +173,7 @@ namespace ConnectOnCommuteBackend.DataAccess
                     Type = 1,
                     Dismissed = false,
                     Timestamp = DateTime.Now.ToUniversalTime(),
-                    Text = "Congraduations, you have a new connection! You and " + user.FirstName + " " + user.LastName + " are now connected!"
+                    Text = "Congratulations, you have a new connection! You and " + user.FirstName + " " + user.LastName + " are now connected!"
                 });
                 EmitNotification(new AccountNotification()
                 {
@@ -181,7 +181,7 @@ namespace ConnectOnCommuteBackend.DataAccess
                     Type = 1,
                     Dismissed = false,
                     Timestamp = DateTime.Now.ToUniversalTime(),
-                    Text = "Congraduations, you have a new connection! You and " + target.FirstName + " " + target.LastName + " are now connected!"
+                    Text = "Congratulations, you have a new connection! You and " + target.FirstName + " " + target.LastName + " are now connected!"
                 });
             }
             return val;
@@ -211,6 +211,12 @@ namespace ConnectOnCommuteBackend.DataAccess
             _dbConnectOnCommute.SaveChanges();
             return notifs;
             
+        }
+        public List<AccountConnection> GetAccountConnections(int userId)
+        {
+            return _dbConnectOnCommute.TblConnection.Where(c => c.AccountId == userId)
+                .Include(c => c.Target)
+                .ToList();
         }
     }
 }

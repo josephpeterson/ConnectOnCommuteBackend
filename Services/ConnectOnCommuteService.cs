@@ -16,10 +16,12 @@ namespace ConnectOnCommuteBackend.Services
         UserPosition AddUserPosition(int userId, UserCoords userLocation);
         bool ConnectWithUser(int accountId, int targetId);
         AccountNotification EmitNotification(AccountNotification notification);
+        List<AccountConnection> GetAccountConnections(int userId);
         List<AccountNotification> GetAvailableNotifications(int accountId);
         Account GetNearestPerson(int userId);
         List<Account> GetPeopleNearUser(int userId);
         bool HasConnection(int accountId, int targetId);
+        Account UpdateAccount(Account user);
     }
     public class ConnectOnCommuteService: IConnectOnCommuteService
     {
@@ -79,6 +81,15 @@ namespace ConnectOnCommuteBackend.Services
         public List<AccountNotification> GetAvailableNotifications(int accountId)
         {
             return _connectOnCommuteDao.GetAvailableNotifications(accountId);
+        }
+        public List<AccountConnection> GetAccountConnections(int userId)
+        {
+            var con = _connectOnCommuteDao.GetAccountConnections(userId);
+            return con;
+        }
+        public Account UpdateAccount(Account user)
+        {
+            return _connectOnCommuteDao.UpdateAccount(user);
         }
     }
 }
